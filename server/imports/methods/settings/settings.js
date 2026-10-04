@@ -7,7 +7,7 @@ Meteor.methods({
   },
 
   checkMongoclientVersion() {
-    Settings.checkMongoclientVersion();
+    return Settings.checkMongoclientVersion();
   },
 
   updateSettings({ settings }) {

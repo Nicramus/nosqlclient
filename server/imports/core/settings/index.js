@@ -5,6 +5,26 @@ import moment from 'moment';
 
 const packageJson = require('/package.json');
 
+const RELEASES_LATEST_URL = 'https://api.github.com/repos/Nicramus/nosqlclient/releases/latest';
+
+// Plain "X.Y.Z" (an optional leading "v" is tolerated); anything else, e.g. a pre-release, gives null.
+const parseVersion = function (version) {
+  const match = /^v?(\d+)\.(\d+)\.(\d+)$/.exec(String(version).trim());
+  return match ? match.slice(1).map(Number) : null;
+};
+
+// true only when latest is strictly greater than current, so a newer local build never offers a "downgrade"
+const isNewerVersion = function (latest, current) {
+  const latestParts = parseVersion(latest);
+  const currentParts = parseVersion(current);
+  if (!latestParts || !currentParts) return false;
+
+  for (let i = 0; i < 3; i += 1) {
+    if (latestParts[i] !== currentParts[i]) return latestParts[i] > currentParts[i];
+  }
+  return false;
+};
+
 const Settings = function () {
 };
 
@@ -98,8 +118,9 @@ Settings.prototype = {
   checkMongoclientVersion() {
     try {
       Logger.info({ message: 'check-version' });
-      const response = HTTP.get('https://api.github.com/repos/nosqlclient/nosqlclient/releases/latest', { headers: { 'User-Agent': 'Mongoclient' } });
-      if (response && response.data && response.data.name && response.data.name !== packageJson.version) return { version: response.data.name, message: 'new-version-available' };
+      const response = HTTP.get(RELEASES_LATEST_URL, { headers: { 'User-Agent': 'Mongoclient' } });
+      const latest = response && response.data && response.data.tag_name;
+      if (latest && isNewerVersion(latest, packageJson.version)) return { version: latest, message: 'new-version-available' };
       return '';
     } catch (exception) {
       Logger.error({ message: 'check-version', metadataToLog: { exception } });
