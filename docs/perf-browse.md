@@ -39,7 +39,7 @@ Add `this.unblock()` to read-only methods: `find`, `findOne`, `count`, `aggregat
 - Mongo client per `sessionId` is a pooled `MongoClient`, safe for concurrent use.
 
 ### 4. Safety cap when LIMIT is missing (the "no filter fetches too much" guard)
-In `getFindFinalObject(...).execute` (`client/imports/ui/querying/querying.js`), **only in the non-export branch**: if `cursorOptions.limit` is absent or empty, set it to a new setting `defaultFindLimit` (default 50) and show an info toast "limited to N; set LIMIT explicitly to change".
+In `getFindFinalObject(...).execute` (`client/imports/ui/querying/querying.js`), **only in the non-export branch**: if `cursorOptions.limit` is absent or empty, set it to a new setting `defaultFindLimit` (default 50) and show an info toast "limited to N; set LIMIT explicitly to change" (once per page load, so repeated Executes stay quiet).
 - Explicit numbers are respected; `limit 0` stays "no limit" (deliberate opt-in to fetch everything).
 - Export CSV/JSON (`/export` route) unchanged — same options as today.
 - Query history re-run goes through the same `execute`, so old history entries without limit also get the cap.
