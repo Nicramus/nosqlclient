@@ -1,0 +1,13 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "bootstrap-sha": "34b9b4ce53dc5e55ac835776ef1953df0ff36f71",
+  "include-v-in-tag": false,
+  "include-component-in-tag": false,
+  "packages": {
+    ".": {
+      "release-type": "node",
+      "package-name": "nosqlclient",
+      "changelog-path": "CHANGELOG.md"
+    }
+  }
+}
