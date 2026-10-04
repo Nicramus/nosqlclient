@@ -54,6 +54,13 @@ Build the image as a job in `release-please.yml` gated on the `release_created` 
 (`needs: release-please`, `if: needs.release-please.outputs.release_created == 'true'`), or have the
 release-please step use a PAT / GitHub App token instead.
 
+## Why release-type `simple`
+
+The `node` release type crashes on our `package-lock.json` (`lockfileVersion: 1`, written by the npm 6 that ships
+with Meteor 1.10) with `Cannot convert undefined or null to object`: its lockfile updater reads the v2+ `packages`
+field unconditionally. The config uses `simple` instead and bumps `$.version` in `package.json` and
+`package-lock.json` through `extra-files`. Switch back to `node` once the lockfile is v2+ (Meteor 2.x / npm 7+).
+
 ## Repository settings
 
 release-please opens PRs with `GITHUB_TOKEN`, which requires

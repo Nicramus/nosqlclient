@@ -5,9 +5,13 @@
   "include-component-in-tag": false,
   "packages": {
     ".": {
-      "release-type": "node",
+      "release-type": "simple",
       "package-name": "nosqlclient",
-      "changelog-path": "CHANGELOG.md"
+      "changelog-path": "CHANGELOG.md",
+      "extra-files": [
+        { "type": "json", "path": "package.json", "jsonpath": "$.version" },
+        { "type": "json", "path": "package-lock.json", "jsonpath": "$.version" }
+      ]
     }
   }
 }
