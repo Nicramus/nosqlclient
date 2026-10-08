@@ -1,9 +1,14 @@
 .git
+.github
 .meteor/local
 packages/*/.build*
 packages/*/.npm*
-.github
 node_modules
+scripts
+docs
+.claude
+.serena
+.idea
 .cfignore
 .codeclimate.yml
 .eslintignore
@@ -11,7 +16,8 @@ node_modules
 .travis.yml
 app.json
 HISTORY.MD
-LICENSE
 README.md
 manifest.yml.sample
 ROADMAP.MD
+Dockerfile
+.dockerignore

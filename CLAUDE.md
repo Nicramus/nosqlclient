@@ -44,7 +44,7 @@ Request flow: Blaze view → `client/imports/ui/<feature>` → `Communicator.cal
 ## Known pain points (targets for the fork)
 - Driver 3.5.8 → weak support for MongoDB 6/7/8, SRV/TLS/auth edge cases. Fix likely requires driver 4.x+ → Meteor 2.x upgrade.
 - Shell page spawns legacy `mongo` binary (removed in MongoDB 6) → needs `mongosh`.
-- Dockerfile on `debian:jessie` + Node 12 (EOL).
+- Docker image on Node 12 (EOL) — follows the Meteor version.
 - UI/perf: large result sets rendered via DataTables/jsoneditor in-browser.
 
 ## Verification

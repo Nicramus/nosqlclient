@@ -48,6 +48,16 @@ node --experimental-websocket scripts/check-ordering.mjs m80        # read-after
 ```
 `compat-matrix.mjs` saves connections named `compat-*` in the app; `perf-find.mjs` reuses `compat-m80-url`, so run the compat test once first.
 
+## Docker image
+```bash
+docker build -t nosqlclient:dev .                                   # multi-stage: Meteor 1.10.2 builder → node:12-bullseye-slim runtime
+docker build -t nosqlclient:dev --build-arg INSTALL_MONGO=false .   # without embedded MongoDB 4.2 (then MONGO_URL is required)
+docker run --rm -p 3000:3000 nosqlclient:dev                        # internal DB = embedded mongod in /data/db
+docker run --rm -p 3000:3000 -e MONGO_URL=mongodb://host.docker.internal:27042/meteor nosqlclient:dev
+```
+- The embedded MongoDB 4.2 also provides the legacy `mongo` shell and `mongodump`/`mongorestore` under `/opt/mongodb/bin/` (the app's default binary path).
+- From a container the mongo-matrix servers are reachable as `host.docker.internal:<port>` (with Docker Desktop; on plain Docker add `--add-host=host.docker.internal:host-gateway` and note the servers bind to 127.0.0.1 only). The replica set `m80rs` advertises `localhost:27081`, so connect to it without `replicaSet=`.
+
 ## Gotchas
 - Meteor builds every directory except `imports/`, `public/`, `private/`, `tests/` and dot-dirs as app code. Dev scripts belong in `scripts/` (ignored via `.meteorignore`), otherwise the app crashes on start.
 - Shell / Schema Analyzer need a legacy `mongo` shell: set Settings → "Mongo binary path" to `~/.meteor/packages/meteor-tool/1.10.2/mt-os.linux.x86_64/dev_bundle/mongodb/bin/` (the default `/opt/mongodb/bin/` exists only in the Docker image; the bundled 3.4 shell can't connect to modern servers).
