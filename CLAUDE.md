@@ -15,10 +15,11 @@ Always use `meteor npm` / `meteor node` (Node 12), never system npm (Node 20).
 ```bash
 meteor run --settings settings.json      # dev server, http://localhost:3000
 meteor npm run lint                      # eslint (airbnb), currently clean
-meteor npm run test:server               # mocha server tests
+meteor npm test                          # server + client mocha tests (client via puppeteer, headless)
+meteor npm run test:server               # server tests (none yet)
 meteor reset                             # wipe local app DB (.meteor/local)
 ```
-Client tests (`test:client`) use chromedriver 2.40 + selenium — effectively dead.
+Client tests (`test:client`, 514 unit tests in `client/imports/test/`) run in headless Chromium via puppeteer 5.5 (last line compatible with Node 12). CI: `.github/workflows/ci.yml` (lint + tests).
 
 Compatibility smoke test (app must be running, matrix started + seeded; results in `docs/compat-matrix.md`):
 ```bash

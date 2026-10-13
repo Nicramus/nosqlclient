@@ -17,7 +17,8 @@ WORKDIR /home/node/app
 RUN curl -sSfL "https://install.meteor.com/?release=${METEOR_RELEASE}" | sh \
  && meteor --version
 
-# npm deps first for layer caching
+# npm deps first for layer caching; puppeteer (devDependency, client tests) doesn't need its Chromium here
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=1
 COPY --chown=node:node package.json package-lock.json ./
 RUN meteor npm ci
 

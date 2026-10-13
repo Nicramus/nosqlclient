@@ -1,0 +1,47 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Cache Meteor
+        id: meteor-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.meteor
+          key: meteor-${{ runner.os }}-${{ hashFiles('.meteor/release', '.meteor/versions') }}
+
+      - name: Install Meteor
+        if: steps.meteor-cache.outputs.cache-hit != 'true'
+        run: curl -sSfL "https://install.meteor.com/?release=$(sed 's/METEOR@//' .meteor/release)" | sh
+
+      - run: echo "$HOME/.meteor" >> "$GITHUB_PATH"
+
+      # npm ci wipes node_modules, so cache the npm download cache instead
+      - name: Cache npm
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: npm-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - run: meteor npm ci
+
+      - run: meteor npm run lint
+
+      # client tests run in headless Chromium via puppeteer (meteortesting:browser-tests)
+      - run: meteor npm test
