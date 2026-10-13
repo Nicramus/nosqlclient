@@ -1,4 +1,4 @@
-import { SessionManager, ErrorHandler, UIComponents, Notification } from '/client/imports/modules';
+import { SessionManager, ErrorHandler, UIComponents } from '/client/imports/modules';
 import { Communicator, ReactivityProvider } from '/client/imports/facades';
 import Helper from '/client/imports/helpers/helper';
 import moment from 'moment';
@@ -150,19 +150,6 @@ DBStats.prototype = {
         this.fetchStatus();
       }, fetchedSettings.dbStatsScheduler ? fetchedSettings.dbStatsScheduler : 3000);
     }
-  },
-
-  subscribe() {
-    Notification.start('#btnSubscribe');
-
-    Communicator.call({
-      methodName: 'handleSubscriber',
-      args: { email: $('#txtEmailToSubscribe').val() },
-      callback: (err) => {
-        if (err) ErrorHandler.showMeteorFuncError(err);
-        else Notification.success('thanks-for-subscription');
-      }
-    });
   },
 
   fetchStats() {

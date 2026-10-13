@@ -4,12 +4,6 @@ import { SessionManager } from '/client/imports/modules';
 import { ReactivityProvider } from '/client/imports/facades';
 import './database_stats.html';
 
-Template.databaseStats.events({
-  'click #btnSubscribe': function () {
-    DBStats.subscribe();
-  },
-});
-
 Template.databaseStats.onRendered(function () {
   const settings = this.subscribe('settings');
   const connections = this.subscribe('connections');
@@ -31,11 +25,6 @@ Template.databaseStats.onDestroyed(() => {
 });
 
 Template.databaseStats.helpers({
-  isSubscribed() {
-    const settings = ReactivityProvider.findOne(ReactivityProvider.types.Settings);
-    return settings ? settings.subscribed : false;
-  },
-
   getServerStatus() {
     if (ReactivityProvider.findOne(ReactivityProvider.types.Settings).showDBStats) {
       if (!SessionManager.get(SessionManager.strSessionServerStatus)) DBStats.fetchStatus();

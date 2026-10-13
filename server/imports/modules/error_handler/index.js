@@ -20,11 +20,6 @@ const Error = function Error() {
       message: '%s-is-invalid-for-%s'
     },
 
-    SubscriptionError: {
-      Exception: Meteor.Error.bind(this, 1003),
-      message: 'subscribe-error'
-    },
-
     ShellError: {
       Exception: Meteor.Error.bind(this, 1004),
       message: 'shell-error'

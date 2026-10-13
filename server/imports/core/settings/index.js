@@ -1,5 +1,4 @@
 import { Database, Logger, Error } from '/server/imports/modules';
-import mailchimpAPI from 'meteor/universe:mailchimp-v3-api';
 import { HTTP } from 'meteor/http';
 import moment from 'moment';
 
@@ -89,31 +88,6 @@ Settings.prototype = {
         }
       });
     }
-  },
-
-  setSubscribed() {
-    Logger.info({ message: 'set-subscribed' });
-    Database.update({ type: Database.types.Settings, selector: {}, modifier: { $set: { subscribed: true } } });
-  },
-
-  subscribe(email) {
-    Logger.info({ message: 'subscribe', metadataToLog: { email } });
-
-    const regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (!regex.test(email)) Error.create({ type: Error.types.InvalidParameter, formatters: ['email', 'subscribe'], metadataToLog: { email } });
-
-    return mailchimpAPI.setApiKey('96b3d560f7ce4cdf78a65383375ee73b-us15').addANewListMember({
-      list_id: 'ff8b28a54d',
-      body: {
-        email_address: email,
-        status: 'subscribed',
-      },
-    }).then(() => {
-      this.setSubscribed();
-    }, (reason) => {
-      const externalError = JSON.parse(reason.response.content).title;
-      Error.create({ type: Error.types.SubscriptionError, externalError, metadataToLog: { statusCode: reason.response.statusCode, title: externalError } });
-    });
   },
 
   checkMongoclientVersion() {

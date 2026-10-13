@@ -549,21 +549,6 @@ describe('Communicator', () => {
       });
     });
 
-    it('handleSubscriber', () => {
-      // prepare
-      const methodName = 'handleSubscriber';
-
-      // execute
-      Communicator.call({ methodName, args: { email: 'ozdemirsercan27@gmail.com' }, callback() {} });
-
-      // verify
-      assertExecution(methodName);
-      expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
-        email: 'ozdemirsercan27@gmail.com'
-      });
-    });
-
     it('getFile', () => {
       // prepare
       const methodName = 'getFile';
