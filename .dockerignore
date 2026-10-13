@@ -22,3 +22,4 @@ ROADMAP.MD
 Dockerfile
 .dockerignore
 docker-compose.yml
+.hadolint.yaml

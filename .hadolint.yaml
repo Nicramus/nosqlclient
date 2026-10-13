@@ -1,0 +1,4 @@
+failure-threshold: warning
+ignored:
+  # bullseye packages come from archive.debian.org; exact apt versions would only add breakage
+  - DL3008

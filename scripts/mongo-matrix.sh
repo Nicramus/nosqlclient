@@ -26,8 +26,8 @@ lookup() {
 }
 
 wait_ping() {
-  local port=$1 i
-  for i in $(seq 1 30); do
+  local port=$1
+  for _ in $(seq 1 30); do
     mongosh --quiet --port "$port" --eval 'db.runCommand({ping:1}).ok' >/dev/null 2>&1 && return 0
     sleep 1
   done
@@ -63,10 +63,10 @@ stop_one() {
   IFS=: read -r name version port mode <<<"$(lookup "$1")"
   local pidfile="$BASE/data/$name/mongod.pid"
   if [[ -f "$pidfile" ]] && kill -0 "$(cat "$pidfile")" 2>/dev/null; then
-    local pid i
+    local pid
     pid="$(cat "$pidfile")"
     kill "$pid"
-    for i in $(seq 1 30); do kill -0 "$pid" 2>/dev/null || break; sleep 1; done
+    for _ in $(seq 1 30); do kill -0 "$pid" 2>/dev/null || break; sleep 1; done
     echo "$name stopped"
   else
     echo "$name not running"

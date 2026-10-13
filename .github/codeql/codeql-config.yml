@@ -1,0 +1,8 @@
+name: nosqlclient
+queries:
+  - uses: security-and-quality
+paths-ignore:
+  # vendored third-party jQuery plugins, not maintained here
+  - client/plugins
+  - public
+  - node_modules
