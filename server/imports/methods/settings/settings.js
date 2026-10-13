@@ -2,10 +2,6 @@ import { Meteor } from 'meteor/meteor';
 import { Settings, Connection } from '/server/imports/core';
 
 Meteor.methods({
-  handleSubscriber({ email }) {
-    Settings.subscribe(email);
-  },
-
   checkMongoclientVersion() {
     return Settings.checkMongoclientVersion();
   },

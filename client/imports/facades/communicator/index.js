@@ -35,7 +35,6 @@ const Communicator = function () {
     dbStats: { },
     serverStatus: { },
     top: { },
-    handleSubscriber: { email: '' },
     getFile: { bucketName: 'fs', fileId: '' },
     getFilesInfo: { bucketName: 'fs', selector: {}, limit: 50 },
     deleteFiles: { bucketName: 'fs', selector: {} },
