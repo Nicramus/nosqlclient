@@ -69,7 +69,7 @@ jobs:
             type=semver,pattern={{version}},value=${{ inputs.tag }},enable=${{ env.PUSH }}
             type=semver,pattern={{major}}.{{minor}},value=${{ inputs.tag }},enable=${{ env.PUSH }}
             type=semver,pattern={{major}},value=${{ inputs.tag }},enable=${{ env.PUSH }}
-            type=raw,value=latest,enable=${{ env.PUSH == 'true' && inputs.latest != false }}
+            type=raw,value=latest,enable=${{ env.PUSH == 'true' && (github.event_name != 'workflow_dispatch' || inputs.latest) }}
             type=ref,event=pr
           labels: |
             org.opencontainers.image.title=nosqlclient
