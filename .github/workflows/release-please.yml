@@ -28,6 +28,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+      security-events: write
     uses: ./.github/workflows/docker.yml
     with:
       tag: ${{ needs.release-please.outputs.tag_name }}

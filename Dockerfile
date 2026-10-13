@@ -8,6 +8,7 @@ FROM node:${NODE_VERSION}-bullseye AS builder
 
 ARG METEOR_RELEASE=1.10.2
 
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 USER node
 ENV PATH=/home/node/.meteor:$PATH
 WORKDIR /home/node/app
@@ -23,9 +24,10 @@ COPY --chown=node:node package.json package-lock.json ./
 RUN meteor npm ci
 
 COPY --chown=node:node . .
-RUN meteor build --directory /home/node/dist --server-only \
- && cd /home/node/dist/bundle/programs/server \
- && meteor npm install --production \
+RUN meteor build --directory /home/node/dist --server-only
+
+WORKDIR /home/node/dist/bundle/programs/server
+RUN meteor npm install --production \
  && meteor npm cache clean --force
 
 # ---------- runtime: bundle only ----------

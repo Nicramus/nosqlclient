@@ -37,6 +37,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+      security-events: write
     env:
       PUSH: ${{ github.event_name != 'pull_request' }}
       TAG: ${{ inputs.tag }}
@@ -82,7 +83,31 @@ jobs:
           # Meteor 1.10.2 and the bundled MongoDB 4.2 tools are x86_64 only
           platforms: linux/amd64
           push: ${{ env.PUSH == 'true' }}
+          # also into the local daemon, for the Trivy scan below
+          load: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      # Report-only for now: the Node 12 / bullseye base has many known CVEs.
+      # Trivy runs from its image pinned by digest, not via aquasecurity/trivy-action
+      # (tags of that action were hijacked in March 2026, CVE-2026-33634).
+      - name: Trivy image scan
+        env:
+          TRIVY_IMAGE: aquasec/trivy:0.74.0@sha256:62b1e65e8869bc4b4c6aa4fa2b21595256c7c2f6018a9d9ad61caf87187c1969
+          SCAN_REF: ${{ env.IMAGE }}:${{ steps.meta.outputs.version }}
+        run: |
+          docker run --rm \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            -v "$PWD:/out" \
+            "$TRIVY_IMAGE" image \
+            --scanners vuln \
+            --severity HIGH,CRITICAL \
+            --format sarif --output /out/trivy.sarif \
+            "$SCAN_REF"
+
+      - uses: github/codeql-action/upload-sarif@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 # v4.38.2
+        with:
+          sarif_file: trivy.sarif
+          category: trivy-image

@@ -1,0 +1,11 @@
+# Only GitHub Actions: keeps the SHA-pinned actions current. npm updates stay manual —
+# most of the tree is held back by Meteor 1.10.2 / Node 12.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ['*']

@@ -51,6 +51,23 @@ node --experimental-websocket scripts/check-ordering.mjs m80        # read-after
 CI (`.github/workflows/ci.yml`) runs lint and `meteor npm test` on every PR and push to master.
 `compat-matrix.mjs` saves connections named `compat-*` in the app; `perf-find.mjs` reuses `compat-m80-url`, so run the compat test once first.
 
+## CI checks
+| Workflow | Runs on | What |
+|---|---|---|
+| `codeql.yml` | PR, master, weekly | CodeQL `security-and-quality` for JS (vendored `client/plugins` ignored). Results: Security → Code scanning. |
+| `dependency-review.yml` | PR | Fails when the PR adds a dependency with a high/critical advisory. Existing advisories don't block. |
+| `docker.yml` | PRs touching the image, releases | Builds the image, Trivy scan (HIGH/CRITICAL, report-only) → Code scanning, category `trivy-image`. |
+| `lint-config.yml` | PR, master | actionlint (workflows), hadolint (`Dockerfile`, config `.hadolint.yaml`), shellcheck (`.docker/entrypoint.sh`, `scripts/*.sh`). |
+
+Locally, same tools via Docker:
+```bash
+docker run --rm -v "$PWD:/repo" -w /repo rhysd/actionlint:1.7.7
+docker run --rm -v "$PWD:/repo" -w /repo hadolint/hadolint:v2.12.0 hadolint --config .hadolint.yaml Dockerfile
+docker run --rm -v "$PWD:/repo" -w /repo koalaman/shellcheck:v0.10.0 .docker/entrypoint.sh scripts/*.sh
+```
+Third-party actions are pinned to commit SHAs; Dependabot (`.github/dependabot.yml`, GitHub Actions only) bumps them weekly.
+Trivy runs from its Docker image pinned by digest, not via `aquasecurity/trivy-action` (its tags were hijacked in March 2026, CVE-2026-33634).
+
 ## Docker image
 ```bash
 docker build -t nosqlclient:dev .                                   # multi-stage: Meteor 1.10.2 builder → node:12-bullseye-slim runtime

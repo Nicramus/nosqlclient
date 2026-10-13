@@ -12,10 +12,6 @@ file_env() {
 	local def="${2:-}"
 	if [ "${!var:-}" ] && [ "${!fileVar:-}" ]; then
 		echo >&2 "error: both $var and $fileVar are set (but are exclusive)"
-    echo $var
-    echo "$var"
-    echo $fileVar
-    echo "$fileVar"
 		exit 1
 	fi
 	local val="$def"
@@ -54,23 +50,23 @@ URL=
 if [ "${MONGO_URL}" == "" ]
 then
     URL=${MONGO_SCHEME}://
-    if [ ! -z ${MONGO_USERNAME} ]
+    if [ -n "${MONGO_USERNAME}" ]
     then
         URL=${URL}${MONGO_USERNAME}
-        if [ ! -z ${MONGO_PASSWORD} ]
+        if [ -n "${MONGO_PASSWORD}" ]
     	then
     	    URL=${URL}:${MONGO_PASSWORD}
     	fi
         URL=${URL}@
     fi
     URL=${URL}${MONGO_ADDRESSES}/${MONGO_DATABASE}
-    if [ -z ${MONGO_TLS} ]
+    if [ -z "${MONGO_TLS}" ]
     then
         URL="${URL}?ssl=false"
     else
         URL="${URL}?ssl=${MONGO_TLS}"
     fi
-    if [ ! -z ${MONGO_OPT_PARAMS} ]
+    if [ -n "${MONGO_OPT_PARAMS}" ]
     then
         URL="${URL}&${MONGO_OPT_PARAMS}"
     fi
@@ -90,7 +86,7 @@ file_env 'MONGOCLIENT_PASSWORD'
 # Set a delay to wait to start the Node process
 if [[ $STARTUP_DELAY ]]; then
   echo "Delaying startup for $STARTUP_DELAY seconds..."
-  sleep $STARTUP_DELAY
+  sleep "$STARTUP_DELAY"
 fi
 
 # Start app
