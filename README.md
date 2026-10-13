@@ -7,7 +7,7 @@ Cross-platform and self hosted, easy to use, MongoDB 4.0+ support and more featu
 > NOSQLCLIENT IS NO LONGER BEING ACTIVELY DEVELOPED. I BELIEVE YOU CAN STILL USE DOCKER BUILDS AND FEEL FREE TO MAIL FOR INQUIRIES: ozdemirsercan27@gmail.com
   
 
-[![Build Status](https://travis-ci.org/nosqlclient/nosqlclient.svg?branch=master)](https://travis-ci.org/nosqlclient/nosqlclient)
+[![ci](https://github.com/Nicramus/nosqlclient/actions/workflows/ci.yml/badge.svg)](https://github.com/Nicramus/nosqlclient/actions/workflows/ci.yml)
 [![GitHub release](https://img.shields.io/github/release/nosqlclient/nosqlclient.svg)](https://github.com/nosqlclient/nosqlclient)
 [![Docker Pulls](https://img.shields.io/docker/pulls/mongoclient/mongoclient.svg)](https://hub.docker.com/r/mongoclient/mongoclient/)
 [![AGPLv3 License](https://img.shields.io/github/license/nosqlclient/nosqlclient.svg)](https://github.com/nosqlclient/nosqlclient/blob/master/LICENSE)

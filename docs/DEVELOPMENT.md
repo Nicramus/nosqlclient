@@ -42,10 +42,13 @@ mongosh "mongodb://admin:admin@localhost:27080/admin" --quiet --eval "PERF_TARGE
 ## Checks
 ```bash
 meteor npm run lint
+meteor npm test                    # server + client mocha tests (client: headless Chromium via puppeteer); add `-- --port 3300` if 3000 is busy
+meteor npm run test:client         # client tests only (514); test:server has no tests yet, it only checks the server starts
 node --experimental-websocket scripts/compat-matrix.mjs            # app running + servers started + seeded; see docs/compat-matrix.md
 node --experimental-websocket scripts/perf-find.mjs m80 3 perf1m   # browse-collection timings; see docs/perf-browse.md
 node --experimental-websocket scripts/check-ordering.mjs m80        # read-after-write ordering (guards this.unblock() in methods)
 ```
+CI (`.github/workflows/ci.yml`) runs lint and `meteor npm test` on every PR and push to master.
 `compat-matrix.mjs` saves connections named `compat-*` in the app; `perf-find.mjs` reuses `compat-m80-url`, so run the compat test once first.
 
 ## Docker image
