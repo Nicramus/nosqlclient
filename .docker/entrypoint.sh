@@ -37,8 +37,17 @@ file_env 'MONGO_DATABASE'
 file_env 'MONGO_TLS'
 file_env 'MONGO_URL'
 
+# The image has no embedded mongod: the app's internal DB must be external,
+# given as MONGO_URL or built from MONGO_ADDRESSES (+ MONGO_USERNAME, ...).
+if [ "${MONGO_URL}" == "" ] && [ "${MONGO_ADDRESSES}" == "" ]
+then
+    echo >&2 "error: MONGO_URL is not set."
+    echo >&2 "Nosqlclient needs a MongoDB for its own data (connections, settings),"
+    echo >&2 "e.g. -e MONGO_URL=mongodb://mongo:27017/nosqlclient (see docker-compose.yml)."
+    exit 1
+fi
+
 MONGO_SCHEME=${MONGO_SCHEME:-mongodb}
-MONGO_ADDRESSES=${MONGO_ADDRESSES:-127.0.0.1:27017}
 MONGO_DATABASE=${MONGO_DATABASE:-meteor}
 
 URL=
@@ -77,21 +86,6 @@ fi
 
 file_env 'MONGOCLIENT_USERNAME'
 file_env 'MONGOCLIENT_PASSWORD'
-
-# Default connection URL in case no connection URL is provided using the environment variables
-MONGO_URL=${MONGO_URL:-mongodb://127.0.0.1:27017/meteor}
-
-# try to start local MongoDB if no external MONGO_URL was set
-if [[ "${MONGO_URL}" == *"127.0.0.1"* ]]; then
-  if hash mongod 2>/dev/null; then
-    printf "\n[-] External MONGO_URL not found. Starting local MongoDB...\n\n"
-    exec mongod --storageEngine=wiredTiger &
-  else
-    echo "ERROR: Mongo not installed inside the container."
-    echo "Please supply a MONGO_URL environment variable."
-    exit 1
-  fi
-fi
 
 # Set a delay to wait to start the Node process
 if [[ $STARTUP_DELAY ]]; then

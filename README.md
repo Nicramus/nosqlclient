@@ -21,21 +21,45 @@ All documentation can be found in https://www.nosqlclient.com/docs
 
 ## Docker
 
-```docker pull mongoclient/mongoclient```
+> **Breaking change (fork 4.1.0):** the image no longer contains its own `mongod`.
+> `MONGO_URL` (a MongoDB for the app's own data: saved connections, settings) is now required,
+> and mounting `/data/db` into the nosqlclient container has no effect.
+> To keep data from an older container, `mongodump` its `/data/db` database (`meteor`) and restore it
+> into the new MongoDB, or start a `mongo` container on the old `/data/db` directory.
 
-To install latest stable release:
+Reference deployment with [docker-compose.yml](docker-compose.yml) (nosqlclient + a `mongo` service with a volume):
 
-```docker pull mongoclient/mongoclient:4.0.0```
+```bash
+docker compose up -d --build     # http://localhost:3000
+```
 
-Then you can run it as a daemon:
+Or run the image against an existing MongoDB:
 
-```docker run -d -p 3000:3000 mongoclient/mongoclient```
+```bash
+docker build -t nosqlclient .
+docker run -d -p 3000:3000 -e MONGO_URL=mongodb://db.example.com:27017/nosqlclient nosqlclient
+```
 
-To set an external mongodb which is required for meteor to work, you can set ```MONGO_URL``` environment variable. Otherwise nosqlclient will install mongodb to container and use it.
+The image still ships the MongoDB 4.2 client tools (legacy `mongo` shell, `mongodump`/`mongorestore`/
+`mongoexport`/`mongoimport` in `/opt/mongodb/bin/`) for the Shell and Backup pages.
 
-To persist your connections and settings simply bind ```/data/db``` directory to your local machine as below.
+### Environment variables
 
-```docker run -d -p 3000:3000 -v <your_path>:/data/db mongoclient/mongoclient```
+| Variable | Default | Description |
+|---|---|---|
+| `MONGO_URL` | — (required) | MongoDB for the app's own data. Alternatively built from `MONGO_ADDRESSES` (`host:port[,host:port]`), `MONGO_USERNAME`, `MONGO_PASSWORD`, `MONGO_DATABASE` (`meteor`), `MONGO_SCHEME` (`mongodb`), `MONGO_TLS` (`false`), `MONGO_OPT_PARAMS`. |
+| `ROOT_URL` | `http://localhost` | Public URL of the app. |
+| `PORT` | `3000` | HTTP port inside the container. |
+| `MONGOCLIENT_DEFAULT_CONNECTION_URL` | — | Connection added on startup. When `MONGO_URL` is built from `MONGO_ADDRESSES`, defaults to that URL. |
+| `MONGOCLIENT_CONNECTIONS_FILE_PATH` | `/opt/meteor/dist/predefined_connections.json` | JSON file with connections added on startup. |
+| `MONGOCLIENT_AUTH` | — | `true` enables HTTP basic auth with `MONGOCLIENT_USERNAME` / `MONGOCLIENT_PASSWORD`. |
+| `MONGOCLIENT_LOG_LEVEL` | `debug` | Server log level. |
+| `STARTUP_DELAY` | — | Seconds to wait before starting the app. |
+
+Every variable read by the entrypoint (`MONGO_*`, `MONGOCLIENT_DEFAULT_CONNECTION_URL`, `MONGOCLIENT_USERNAME`,
+`MONGOCLIENT_PASSWORD`) can also be read from a file via `<NAME>_FILE` (Docker secrets).
+
+Build arg `INSTALL_MONGO_TOOLS=false` leaves out the MongoDB client tools (Shell and Backup pages won't work).
 
 
 ## History

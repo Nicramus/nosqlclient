@@ -30,9 +30,9 @@ RUN meteor build --directory /home/node/dist --server-only \
 # ---------- runtime: bundle only ----------
 FROM node:${NODE_VERSION}-bullseye-slim
 
-# Embedded MongoDB 4.2 as the app's internal DB (used when no MONGO_URL is given).
-# Also provides the legacy `mongo` shell and mongodump/mongorestore used by the Shell and Backup pages.
-ARG INSTALL_MONGO=true
+# MongoDB 4.2 client tools only: the legacy `mongo` shell and mongodump/mongorestore/export/import
+# used by the Shell and Backup pages. No mongod — the app's internal DB comes from MONGO_URL.
+ARG INSTALL_MONGO_TOOLS=true
 ARG MONGO_TARBALL=mongodb-linux-x86_64-debian10-4.2.25
 
 # default values for Meteor environment variables
@@ -42,7 +42,7 @@ ENV ROOT_URL=http://localhost \
     MONGOCLIENT_CONNECTIONS_FILE_PATH=/opt/meteor/dist/predefined_connections.json
 
 # Debian 11 is past end of LTS — its packages now live on archive.debian.org only.
-RUN if [ "$INSTALL_MONGO" = true ]; then \
+RUN if [ "$INSTALL_MONGO_TOOLS" = true ]; then \
       printf '%s\n' 'deb http://archive.debian.org/debian bullseye main' \
                     'deb http://archive.debian.org/debian-security bullseye-security main' > /etc/apt/sources.list \
    && apt-get update \
@@ -50,8 +50,8 @@ RUN if [ "$INSTALL_MONGO" = true ]; then \
    && curl -sSfL "https://fastdl.mongodb.org/linux/${MONGO_TARBALL}.tgz" -o /tmp/mongo.tgz \
    && mkdir -p /opt/mongodb \
    && tar -xzf /tmp/mongo.tgz --strip-components=1 -C /opt/mongodb \
+   && rm -f /opt/mongodb/bin/mongod /opt/mongodb/bin/mongos /opt/mongodb/bin/install_compass \
    && ln -sf /opt/mongodb/bin/* /usr/local/bin/ \
-   && mkdir -p /data/db && chown -R node:node /data \
    && apt-get purge -y --auto-remove curl \
    && rm -rf /tmp/* /var/lib/apt/lists/*; \
     fi

@@ -51,11 +51,13 @@ node --experimental-websocket scripts/check-ordering.mjs m80        # read-after
 ## Docker image
 ```bash
 docker build -t nosqlclient:dev .                                   # multi-stage: Meteor 1.10.2 builder → node:12-bullseye-slim runtime
-docker build -t nosqlclient:dev --build-arg INSTALL_MONGO=false .   # without embedded MongoDB 4.2 (then MONGO_URL is required)
-docker run --rm -p 3000:3000 nosqlclient:dev                        # internal DB = embedded mongod in /data/db
+docker build -t nosqlclient:dev --build-arg INSTALL_MONGO_TOOLS=false .   # without MongoDB 4.2 client tools
 docker run --rm -p 3000:3000 -e MONGO_URL=mongodb://host.docker.internal:27042/meteor nosqlclient:dev
+docker compose up -d --build                                        # app + mongo service (volume mongo-data)
+docker compose down -v                                              # stop and wipe the app DB volume
 ```
-- The embedded MongoDB 4.2 also provides the legacy `mongo` shell and `mongodump`/`mongorestore` under `/opt/mongodb/bin/` (the app's default binary path).
+- No embedded `mongod`: `MONGO_URL` is required, the entrypoint exits with an error without it. Env vars are listed in the README.
+- The image ships MongoDB 4.2 client tools only — legacy `mongo` shell and `mongodump`/`mongorestore` under `/opt/mongodb/bin/` (the app's default binary path).
 - From a container the mongo-matrix servers are reachable as `host.docker.internal:<port>` (with Docker Desktop; on plain Docker add `--add-host=host.docker.internal:host-gateway` and note the servers bind to 127.0.0.1 only). The replica set `m80rs` advertises `localhost:27081`, so connect to it without `replicaSet=`.
 
 ## Gotchas

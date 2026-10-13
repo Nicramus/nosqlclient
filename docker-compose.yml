@@ -1,0 +1,38 @@
+# Reference deployment: nosqlclient + a MongoDB for the app's own data
+# (saved connections, settings, query history). Not the database you manage —
+# add those as connections in the UI or via MONGOCLIENT_DEFAULT_CONNECTION_URL.
+#
+#   docker compose up -d --build     # http://localhost:3000
+#   docker compose down              # keeps data in the `mongo-data` volume
+services:
+  nosqlclient:
+    build: .
+    image: nosqlclient:local
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      MONGO_URL: mongodb://mongo:27017/nosqlclient
+      ROOT_URL: http://localhost:3000
+      # MONGOCLIENT_DEFAULT_CONNECTION_URL: mongodb://user:pass@db.example.com:27017/admin
+      # MONGOCLIENT_CONNECTIONS_FILE_PATH: /opt/meteor/dist/predefined_connections.json
+      # MONGOCLIENT_AUTH: "true"
+      # MONGOCLIENT_USERNAME: admin
+      # MONGOCLIENT_PASSWORD: change-me
+    depends_on:
+      mongo:
+        condition: service_healthy
+
+  mongo:
+    image: mongo:7.0
+    restart: unless-stopped
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  mongo-data:
