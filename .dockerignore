@@ -21,3 +21,4 @@ manifest.yml.sample
 ROADMAP.MD
 Dockerfile
 .dockerignore
+docker-compose.yml
