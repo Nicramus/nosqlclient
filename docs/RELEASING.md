@@ -49,10 +49,17 @@ so a release is visible to users as soon as step 4 is done.
 ## Docker image
 
 Tags and releases created by release-please use the workflow's `GITHUB_TOKEN`, and events created with
-that token **do not trigger other workflows** (a separate `on: push: tags` workflow would not run).
-Build the image as a job in `release-please.yml` gated on the `release_created` output
-(`needs: release-please`, `if: needs.release-please.outputs.release_created == 'true'`), or have the
-release-please step use a PAT / GitHub App token instead.
+that token **do not trigger other workflows** (an `on: push: tags` workflow would not run). So the image is
+built by the `docker` job in `release-please.yml`, gated on `release_created`, which calls the reusable
+`.github/workflows/docker.yml` with the new tag. It pushes `ghcr.io/nicramus/nosqlclient` tagged `X.Y.Z`, `X.Y`,
+`X` and `latest` (linux/amd64 only — Meteor 1.10.2 and the MongoDB 4.2 tools have no arm64 builds).
+
+- Rebuild an existing release: *Actions → docker → Run workflow*, enter the tag (uncheck `latest` for an
+  older release).
+- PRs touching `Dockerfile`, `.dockerignore` or `.docker/` run the same build without pushing.
+- After the first publish make the package public once: *github.com/Nicramus → Packages → nosqlclient →
+  Package settings → Change visibility → Public*, and check that it is linked to this repository
+  (it is, through the `org.opencontainers.image.source` label).
 
 ## Why release-type `simple`
 

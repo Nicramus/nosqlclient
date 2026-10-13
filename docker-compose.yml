@@ -2,12 +2,13 @@
 # (saved connections, settings, query history). Not the database you manage —
 # add those as connections in the UI or via MONGOCLIENT_DEFAULT_CONNECTION_URL.
 #
-#   docker compose up -d --build     # http://localhost:3000
+#   docker compose up -d             # released image from GHCR, http://localhost:3000
+#   docker compose up -d --build     # build the image from this checkout instead
 #   docker compose down              # keeps data in the `mongo-data` volume
 services:
   nosqlclient:
+    image: ghcr.io/nicramus/nosqlclient:latest
     build: .
-    image: nosqlclient:local
     restart: unless-stopped
     ports:
       - "3000:3000"

@@ -27,17 +27,21 @@ All documentation can be found in https://www.nosqlclient.com/docs
 > To keep data from an older container, `mongodump` its `/data/db` database (`meteor`) and restore it
 > into the new MongoDB, or start a `mongo` container on the old `/data/db` directory.
 
+Images are published to GHCR for every release: `ghcr.io/nicramus/nosqlclient` with tags `X.Y.Z`, `X.Y`, `X`
+and `latest` (linux/amd64).
+
 Reference deployment with [docker-compose.yml](docker-compose.yml) (nosqlclient + a `mongo` service with a volume):
 
 ```bash
-docker compose up -d --build     # http://localhost:3000
+docker compose up -d                 # http://localhost:3000
+docker compose pull && docker compose up -d   # update to the latest release
+docker compose up -d --build         # build the image from this checkout instead
 ```
 
 Or run the image against an existing MongoDB:
 
 ```bash
-docker build -t nosqlclient .
-docker run -d -p 3000:3000 -e MONGO_URL=mongodb://db.example.com:27017/nosqlclient nosqlclient
+docker run -d -p 3000:3000 -e MONGO_URL=mongodb://db.example.com:27017/nosqlclient ghcr.io/nicramus/nosqlclient:latest
 ```
 
 The image still ships the MongoDB 4.2 client tools (legacy `mongo` shell, `mongodump`/`mongorestore`/
