@@ -1,9 +1,9 @@
 ---
 name: meteor-dev
-description: Run, restart, debug and reset the nosqlclient Meteor 1.10 dev server. Use when starting the app, checking server logs, installing npm deps, or hitting Meteor/Node 12 build errors.
+description: Run, restart, debug and reset the nosqlclient Meteor 2.16 dev server. Use when starting the app, checking server logs, installing npm deps, or hitting Meteor/Node 12 build errors.
 ---
 
-# Meteor dev server (Meteor 1.10.2 / Node 12)
+# Meteor dev server (Meteor 2.16 / Node 14)
 
 Meteor lives in `~/.meteor`; prefix every command with `export PATH=$HOME/.meteor:$PATH;`.
 
