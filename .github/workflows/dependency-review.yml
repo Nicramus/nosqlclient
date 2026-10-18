@@ -1,6 +1,6 @@
 name: dependency-review
 
-# Fails a PR only when it *adds* a vulnerable dependency; the existing Meteor 1.10 tree
+# Fails a PR only when it *adds* a vulnerable dependency; the existing Meteor 2.16 tree
 # already has many known advisories (see `meteor npm audit`).
 on:
   pull_request:

@@ -37,7 +37,7 @@ describe('Communicator', () => {
         selectedCollection: 'sercan',
         selector: { name: 'tugce' },
         options: {},
-        sessionId: Meteor.default_connection._lastSessionId
+        sessionId: Meteor.connection._lastSessionId
       });
     });
 
@@ -55,7 +55,7 @@ describe('Communicator', () => {
         selector: { name: 'tugce' },
         cursorOptions: { limit: 15 },
         executeExplain: false,
-        sessionId: Meteor.default_connection._lastSessionId
+        sessionId: Meteor.connection._lastSessionId
       });
     });
 
@@ -69,7 +69,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId
+        sessionId: Meteor.connection._lastSessionId
       });
     });
 
@@ -83,7 +83,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         selectedCollection: 'sercan',
         selector: { surname: 'ozdemir' }
       });
@@ -99,7 +99,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         selectedCollection: ''
       });
     });
@@ -114,7 +114,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         connectionId: '123',
         username: 'tttt',
         password: '1'
@@ -131,7 +131,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId
+        sessionId: Meteor.connection._lastSessionId
       });
     });
 
@@ -145,7 +145,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         selectedCollection: 'ttt',
         pipeline: [],
         options: {}
@@ -162,7 +162,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         dbName: '123'
       });
     });
@@ -177,7 +177,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         collectionName: 'sercan',
         options: { test: 123 }
       });
@@ -193,7 +193,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         runOnAdminDB: true,
         command: { blabla: true },
         options: { xxx: 123 }
@@ -210,7 +210,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         runOnAdminDB: true,
         command: { },
         options: { xxx: 123 }
@@ -227,7 +227,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         selectedCollection: 'xas',
         newName: 'ttt',
         options: {}
@@ -244,7 +244,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         selectedCollection: 'testt',
         options: {}
       });
@@ -260,7 +260,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         file: { ufuk: [{ mal: true }] }
       });
     });
@@ -275,7 +275,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId
+        sessionId: Meteor.connection._lastSessionId
       });
     });
 
@@ -289,7 +289,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         connection: {}
       });
     });
@@ -304,7 +304,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId
+        sessionId: Meteor.connection._lastSessionId
       });
     });
 
@@ -318,7 +318,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         connection: { test: [1], test2: 'sercan', test3: false, test4: { name: 'tugce' } }
       });
     });
@@ -333,7 +333,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         connectionId: '123'
       });
     });
@@ -348,7 +348,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         connection: { test: [1], test2: 'sercan', test3: false, test4: { name: 'tugce' } }
       });
     });
@@ -363,7 +363,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         history: { asd: 123 }
       });
     });
@@ -378,7 +378,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         selectedCollection: 'xxx',
         updateObjects: [{ myObject: 123 }],
         deletedObjectIds: [],
@@ -396,7 +396,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         selectedCollection: 'test',
         selector: { name: 'sercan', abc: false },
         setObject: { surname: 'ozdemir' },
@@ -414,7 +414,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId
+        sessionId: Meteor.connection._lastSessionId
       });
     });
 
@@ -428,7 +428,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         binary: 'mongodump'
       });
     });
@@ -443,7 +443,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         args: []
       });
     });
@@ -458,7 +458,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         args: ['--db', 'test']
       });
     });
@@ -473,7 +473,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         args: ['--db', 'test']
       });
     });
@@ -488,7 +488,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         args: ['--db', 'test']
       });
     });
@@ -503,7 +503,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId
+        sessionId: Meteor.connection._lastSessionId
       });
     });
 
@@ -517,7 +517,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId
+        sessionId: Meteor.connection._lastSessionId
       });
     });
 
@@ -531,7 +531,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId
+        sessionId: Meteor.connection._lastSessionId
       });
     });
 
@@ -545,7 +545,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId
+        sessionId: Meteor.connection._lastSessionId
       });
     });
 
@@ -559,7 +559,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         bucketName: 'fs',
         fileId: '123'
       });
@@ -575,7 +575,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         bucketName: 'xx',
         selector: {},
         limit: 30
@@ -592,7 +592,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         bucketName: 'fss',
         selector: {}
       });
@@ -608,7 +608,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         bucketName: 'fs',
         fileId: ''
       });
@@ -625,7 +625,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         bucketName: 'fs',
         blob,
         fileName: 'sercan',
@@ -645,7 +645,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         selectedCollection: 'sercan',
         isFull: true
       });
@@ -661,7 +661,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         selectedCollection: '',
         indexName: 'sss'
       });
@@ -677,7 +677,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         command: 'show collections',
         connectionId: '123',
         username: '',
@@ -695,7 +695,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId
+        sessionId: Meteor.connection._lastSessionId
       });
     });
 
@@ -709,7 +709,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         connectionId: 'ttt',
         username: 's',
         password: ''
@@ -726,7 +726,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId
+        sessionId: Meteor.connection._lastSessionId
       });
     });
 
@@ -740,7 +740,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         connectionId: '123',
         username: '',
         password: '',
@@ -758,7 +758,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         settings: { asd: true }
       });
     });
@@ -773,7 +773,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         selectedCollection: '',
         docs: [{ asd: true }],
         options: { upsert: true }
@@ -790,7 +790,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         action: '123'
       });
     });
@@ -805,7 +805,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         resource: 'anyResource'
       });
     });
@@ -820,7 +820,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         roleName: 'sercanRole'
       });
     });
@@ -835,7 +835,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId
+        sessionId: Meteor.connection._lastSessionId
       });
     });
 
@@ -849,7 +849,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         username: 'sercan',
         password: '123',
         options: {},
@@ -867,7 +867,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId
+        sessionId: Meteor.connection._lastSessionId
       });
     });
 
@@ -881,7 +881,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId
+        sessionId: Meteor.connection._lastSessionId
       });
     });
 
@@ -895,7 +895,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId
+        sessionId: Meteor.connection._lastSessionId
       });
     });
 
@@ -909,7 +909,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         username: 'sercan',
         runOnAdminDB: true
       });
@@ -925,7 +925,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId
+        sessionId: Meteor.connection._lastSessionId
       });
     });
 
@@ -939,7 +939,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId
+        sessionId: Meteor.connection._lastSessionId
       });
     });
 
@@ -953,7 +953,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         level: ''
       });
     });
@@ -968,7 +968,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         collectionName: 'sercan',
         options: {}
       });
@@ -984,7 +984,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         selectedCollection: 'sercan',
         operations: [],
         options: { test: 123 }
@@ -1001,7 +1001,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         selectedCollection: 'sercan',
         fields: [{ xx: 1, yy: -1, zz: '$text' }],
         options: {}
@@ -1018,7 +1018,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         selectedCollection: 'xxx',
         selector: { name: 'sercan' },
         fieldName: 'sercan',
@@ -1036,7 +1036,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         selectedCollection: 'tugce',
         selector: { name: 'sercan' },
         cursorOptions: { limit: 50 }
@@ -1053,7 +1053,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         selectedCollection: 'sercan',
         selector: { x: true },
         options: {}
@@ -1070,7 +1070,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         selectedCollection: 'sercan',
         selector: { x: true },
         options: {},
@@ -1088,7 +1088,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         selectedCollection: 'sercan',
         selector: { x: true },
         options: { skip: 50 },
@@ -1106,7 +1106,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         selectedCollection: 'sercan',
         xAxis: 50,
         yAxis: 30,
@@ -1124,7 +1124,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         selectedCollection: 'ttt',
         keys: [],
         condition: { x: 1 },
@@ -1145,7 +1145,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         selectedCollection: 'tt'
       });
     });
@@ -1160,7 +1160,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         selectedCollection: 'tt',
         map: {},
         reduce: {},
@@ -1178,7 +1178,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         selectedCollection: 'x'
       });
     });
@@ -1193,7 +1193,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         selectedCollection: ''
       });
     });
@@ -1208,7 +1208,7 @@ describe('Communicator', () => {
       // verify
       assertExecution(methodName);
       expect(Meteor.call.getCall(0).args[1]).to.eql({
-        sessionId: Meteor.default_connection._lastSessionId,
+        sessionId: Meteor.connection._lastSessionId,
         selectedCollection: 'sercan',
         selector: { name: 'tugce' },
         setObject: { surname: 'ozdemir' },

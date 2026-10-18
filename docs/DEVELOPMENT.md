@@ -4,11 +4,11 @@ Tested on Ubuntu 24.04. Nothing is installed system-wide; no sudo needed.
 
 ## One-time setup
 ```bash
-# 1. Meteor 1.10.2 (bundles Node 12 and its own MongoDB for the app's internal data)
-curl -s "https://install.meteor.com/?release=1.10.2" | sh     # the final sudo step may fail — that's fine
+# 1. Meteor 2.16 (bundles Node 14 and its own MongoDB 7.0 for the app's internal data)
+curl -s "https://install.meteor.com/?release=2.16" | sh     # the final sudo step may fail — that's fine
 echo 'export PATH="$HOME/.meteor:$PATH"' >> ~/.bashrc && source ~/.bashrc
 
-# 2. Dependencies — always through meteor (Node 12), never system npm
+# 2. Dependencies — always through meteor (Node 14), never system npm
 cd nosqlclient-fork
 meteor npm ci
 ```
@@ -43,7 +43,7 @@ mongosh "mongodb://admin:admin@localhost:27080/admin" --quiet --eval "PERF_TARGE
 ```bash
 meteor npm run lint
 meteor npm test                    # server + client mocha tests (client: headless Chromium via puppeteer); add `-- --port 3300` if 3000 is busy
-meteor npm run test:client         # client tests only (514); test:server has no tests yet, it only checks the server starts
+meteor npm run test:client         # client tests only (513); test:server has no tests yet, it only checks the server starts
 node --experimental-websocket scripts/compat-matrix.mjs            # app running + servers started + seeded; see docs/compat-matrix.md
 node --experimental-websocket scripts/perf-find.mjs m80 3 perf1m   # browse-collection timings; see docs/perf-browse.md
 node --experimental-websocket scripts/check-ordering.mjs m80        # read-after-write ordering (guards this.unblock() in methods)
@@ -70,7 +70,7 @@ Trivy runs from its Docker image pinned by digest, not via `aquasecurity/trivy-a
 
 ## Docker image
 ```bash
-docker build -t nosqlclient:dev .                                   # multi-stage: Meteor 1.10.2 builder → node:12-bullseye-slim runtime
+docker build -t nosqlclient:dev .                                   # multi-stage: Meteor 2.16 builder → node:14-bullseye-slim runtime
 docker build -t nosqlclient:dev --build-arg INSTALL_MONGO_TOOLS=false .   # without MongoDB 4.2 client tools
 docker run --rm -p 3000:3000 -e MONGO_URL=mongodb://host.docker.internal:27042/meteor nosqlclient:dev
 docker compose up -d --build                                        # app + mongo service (volume mongo-data)
@@ -82,5 +82,6 @@ docker compose down -v                                              # stop and w
 
 ## Gotchas
 - Meteor builds every directory except `imports/`, `public/`, `private/`, `tests/` and dot-dirs as app code. Dev scripts belong in `scripts/` (ignored via `.meteorignore`), otherwise the app crashes on start.
-- Shell / Schema Analyzer need a legacy `mongo` shell: set Settings → "Mongo binary path" to `~/.meteor/packages/meteor-tool/1.10.2/mt-os.linux.x86_64/dev_bundle/mongodb/bin/` (the default `/opt/mongodb/bin/` exists only in the Docker image; the bundled 3.4 shell can't connect to modern servers).
-- Ignore the "Meteor 3.x is available" banner — don't run `meteor update`.
+- Shell / Schema Analyzer need a legacy `mongo` shell, which Meteor 2.16 no longer bundles. Fetch Meteor 1.10.2's toolchain once (`meteor --release 1.10.2 --version`) and set Settings → "Mongo binary path" to `~/.meteor/packages/meteor-tool/1.10.2/mt-os.linux.x86_64/dev_bundle/mongodb/bin/` (MongoDB 4.2 tools; the default `/opt/mongodb/bin/` exists only in the Docker image). The mongo-matrix `m42` instance uses the same binaries.
+- After upgrading from Meteor 1.10 the dev DB (MongoDB 4.2 files) won't open under 7.0 (`Unexpected mongo exit code 62`): move `.meteor/local/db` aside or `meteor reset`.
+- Ignore the "Meteor 3.x is available" banner — don't run `meteor update` (Meteor 3 drops Fibers; the server code is synchronous).

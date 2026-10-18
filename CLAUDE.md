@@ -4,14 +4,14 @@ Web MongoDB client. Fork of nosqlclient/nosqlclient (upstream inactive since 202
 Remotes: `origin` = Nicramus/nosqlclient, `upstream` = nosqlclient/nosqlclient.
 
 ## Stack
-- **Meteor 1.10.2** — bundles Node 12.16.1 and a dev MongoDB (app's internal DB). Installed in `~/.meteor` (on PATH via `~/.bashrc`).
+- **Meteor 2.16** — bundles Node 14.21.4 and a dev MongoDB 7.0.5 (app's internal DB). Installed in `~/.meteor` (on PATH via `~/.bashrc`).
 - Client: **Blaze** templates + jQuery 2, Bootstrap 3, FlowRouter/BlazeLayout, tap:i18n, CodeMirror/ace/jsoneditor, DataTables. Vendored jQuery plugins in `client/plugins/` (don't edit unless necessary).
 - Server: Meteor methods, `mongodb` driver **3.5.8** (callback API + `meteorhacks:async`/Fibers), tunnel-ssh 4.1.4, winston.
 - Keep to the existing stack (Blaze + jQuery). Don't introduce React/other frameworks.
 
 ## Commands
 Human-facing setup/run guide: `docs/DEVELOPMENT.md` (keep it in sync when commands change).
-Always use `meteor npm` / `meteor node` (Node 12), never system npm (Node 20).
+Always use `meteor npm` / `meteor node` (Node 14), never system npm (Node 20).
 ```bash
 meteor run --settings settings.json      # dev server, http://localhost:3000
 meteor npm run lint                      # eslint (airbnb), currently clean
@@ -19,7 +19,7 @@ meteor npm test                          # server + client mocha tests (client v
 meteor npm run test:server               # server tests (none yet)
 meteor reset                             # wipe local app DB (.meteor/local)
 ```
-Client tests (`test:client`, 514 unit tests in `client/imports/test/`) run in headless Chromium via puppeteer 5.5 (last line compatible with Node 12). CI: `.github/workflows/ci.yml` (lint + tests).
+Client tests (`test:client`, 513 unit tests in `client/imports/test/`) run in headless Chromium via puppeteer 5.5. CI: `.github/workflows/ci.yml` (lint + tests).
 
 Compatibility smoke test (app must be running, matrix started + seeded; results in `docs/compat-matrix.md`):
 ```bash
@@ -43,9 +43,9 @@ Request flow: Blaze view → `client/imports/ui/<feature>` → `Communicator.cal
 - `i18n/` — translations (tap:i18n).
 
 ## Known pain points (targets for the fork)
-- Driver 3.5.8 → weak support for MongoDB 6/7/8, SRV/TLS/auth edge cases. Fix likely requires driver 4.x+ → Meteor 2.x upgrade.
+- Driver 3.5.8 → weak support for MongoDB 6/7/8, SRV/TLS/auth edge cases. Fix: driver 4.17 (last with callback API; Meteor 2.16 done, see issue #25).
 - Shell page spawns legacy `mongo` binary (removed in MongoDB 6) → needs `mongosh`.
-- Docker image on Node 12 (EOL) — follows the Meteor version.
+- Docker image on Node 14 (EOL) — follows the Meteor version; Meteor 3 needs an async rewrite of the server (no Fibers).
 - UI/perf: large result sets rendered via DataTables/jsoneditor in-browser.
 
 ## Verification

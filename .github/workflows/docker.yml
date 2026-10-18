@@ -80,7 +80,7 @@ jobs:
       - uses: docker/build-push-action@v6
         with:
           context: .
-          # Meteor 1.10.2 and the bundled MongoDB 4.2 tools are x86_64 only
+          # the bundled MongoDB 4.2 tools are x86_64 only
           platforms: linux/amd64
           push: ${{ env.PUSH == 'true' }}
           # also into the local daemon, for the Trivy scan below
@@ -90,7 +90,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      # Report-only for now: the Node 12 / bullseye base has many known CVEs.
+      # Report-only for now: the Node 14 / bullseye base has many known CVEs.
       # Trivy runs from its image pinned by digest, not via aquasecurity/trivy-action
       # (tags of that action were hijacked in March 2026, CVE-2026-33634).
       - name: Trivy image scan

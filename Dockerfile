@@ -1,12 +1,12 @@
 # syntax=docker/dockerfile:1
 
-# Node version must stay on 12.x — Meteor 1.10.2 bundles target Node 12.
-ARG NODE_VERSION=12.22.12
+# Node version must stay on 14.x — Meteor 2.16 bundles target Node 14 (Meteor ships 14.21.4; 14.21.3 is the last official image).
+ARG NODE_VERSION=14.21.3
 
 # ---------- builder: Meteor toolchain + app build ----------
 FROM node:${NODE_VERSION}-bullseye AS builder
 
-ARG METEOR_RELEASE=1.10.2
+ARG METEOR_RELEASE=2.16
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 USER node
