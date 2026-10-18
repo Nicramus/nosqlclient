@@ -6,7 +6,8 @@ Remotes: `origin` = Nicramus/nosqlclient, `upstream` = nosqlclient/nosqlclient.
 ## Stack
 - **Meteor 2.16** — bundles Node 14.21.4 and a dev MongoDB 7.0.5 (app's internal DB). Installed in `~/.meteor` (on PATH via `~/.bashrc`).
 - Client: **Blaze** templates + jQuery 2, Bootstrap 3, FlowRouter/BlazeLayout, tap:i18n, CodeMirror/ace/jsoneditor, DataTables. Vendored jQuery plugins in `client/plugins/` (don't edit unless necessary).
-- Server: Meteor methods, `mongodb` driver **3.5.8** (callback API + `meteorhacks:async`/Fibers), tunnel-ssh 4.1.4, winston.
+- Server: Meteor methods, `mongodb` driver **4.17** (callback API + `meteorhacks:async`/Fibers; driver 5+ drops callbacks), tunnel-ssh 4.1.4, winston.
+  Methods removed in driver 4 (`profilingInfo`, `reIndex`, `group`, `geoHaystackSearch`, `executeDbAdminCommand`) are run as server commands; TLS certs go in as `ca`/`cert`/`key` buffers (driver 4's `sslCA`/`sslCert`/`sslKey` are file paths).
 - Keep to the existing stack (Blaze + jQuery). Don't introduce React/other frameworks.
 
 ## Commands
@@ -43,7 +44,7 @@ Request flow: Blaze view → `client/imports/ui/<feature>` → `Communicator.cal
 - `i18n/` — translations (tap:i18n).
 
 ## Known pain points (targets for the fork)
-- Driver 3.5.8 → weak support for MongoDB 6/7/8, SRV/TLS/auth edge cases. Fix: driver 4.17 (last with callback API; Meteor 2.16 done, see issue #25).
+- Driver is 4.17 (issue #25). Driver 5+/6 need Promise-based server code → Meteor 3 rewrite.
 - Shell page spawns legacy `mongo` binary (removed in MongoDB 6) → needs `mongosh`.
 - Docker image on Node 14 (EOL) — follows the Meteor version; Meteor 3 needs an async rewrite of the server (no Fibers).
 - UI/perf: large result sets rendered via DataTables/jsoneditor in-browser.

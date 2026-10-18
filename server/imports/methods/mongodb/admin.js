@@ -9,11 +9,11 @@ Meteor.methods({
   top({ sessionId }) {
     const methodArray = [
       {
-        executeDbAdminCommand: [{ top: 1 }, {}],
+        command: [{ top: 1 }],
       }
     ];
 
-    return MongoDB.executeAdmin({ methodArray, sessionId });
+    return MongoDB.executeAdmin({ methodArray, runOnAdminDB: true, sessionId });
   },
 
   dbStats({ sessionId }) {

@@ -1,18 +1,27 @@
 import { Meteor } from 'meteor/meteor';
 import { MongoDB } from '/server/imports/core';
 
+// driver 4 dropped returnOriginal in favour of returnDocument; the UI still sends returnOriginal
+const withReturnDocument = (options) => {
+  if (!options || !('returnOriginal' in options)) return options;
+  const { returnOriginal, ...rest } = options;
+  return { ...rest, returnDocument: returnOriginal === false ? 'after' : 'before' };
+};
+
 // Read-only methods call this.unblock() so a slow read doesn't queue this client's later calls behind it;
 // write methods stay blocking, so a read issued after a write still sees it. A blocking call issued after a read
 // (e.g. disconnect) may run while that read is still in flight; the read then fails with a connection error.
 Meteor.methods({
   profilingInfo({ sessionId }) {
     this.unblock();
+    // Db.profilingInfo was removed in driver 4; it was a plain read of system.profile
     const methodArray = [
       {
-        profilingInfo: [],
+        find: [{}],
       },
+      { toArray: [] },
     ];
-    return MongoDB.executeAdmin({ methodArray, sessionId });
+    return MongoDB.execute({ selectedCollection: 'system.profile', methodArray, sessionId });
   },
 
   setProfilingLevel({ level, sessionId }) {
@@ -56,10 +65,10 @@ Meteor.methods({
   geoHaystackSearch({ selectedCollection, xAxis, yAxis, options, sessionId }) {
     const methodArray = [
       {
-        geoHaystackSearch: [xAxis, yAxis, options],
+        command: [Object.assign({ geoSearch: selectedCollection, near: [xAxis, yAxis] }, options)],
       },
     ];
-    return MongoDB.execute({ selectedCollection, methodArray, sessionId });
+    return MongoDB.executeAdmin({ methodArray, sessionId });
   },
 
   dropIndex({ selectedCollection, indexName, sessionId }) {
@@ -146,7 +155,7 @@ Meteor.methods({
   findOneAndUpdate({ selectedCollection, selector, setObject, options, sessionId }) {
     const methodArray = [
       {
-        findOneAndUpdate: [selector, setObject, options],
+        findOneAndUpdate: [selector, setObject, withReturnDocument(options)],
       },
     ];
     return MongoDB.execute({ selectedCollection, methodArray, sessionId });
@@ -155,7 +164,7 @@ Meteor.methods({
   findOneAndReplace({ selectedCollection, selector, replacement, options, sessionId }) {
     const methodArray = [
       {
-        findOneAndReplace: [selector, replacement, options],
+        findOneAndReplace: [selector, replacement, withReturnDocument(options)],
       },
     ];
     return MongoDB.execute({ selectedCollection, methodArray, sessionId });
@@ -164,7 +173,7 @@ Meteor.methods({
   findOneAndDelete({ selectedCollection, selector, options, sessionId }) {
     const methodArray = [
       {
-        findOneAndDelete: [selector, options],
+        findOneAndDelete: [selector, withReturnDocument(options)],
       },
     ];
     return MongoDB.execute({ selectedCollection, methodArray, sessionId });
@@ -192,14 +201,23 @@ Meteor.methods({
     return MongoDB.execute({ selectedCollection, methodArray, sessionId });
   },
 
-  group({ selectedCollection, keys, condition, initial, reduce, finalize, command, sessionId }) {
+  group({ selectedCollection, keys, condition, initial, reduce, finalize, sessionId }) {
     const methodArray = [
       {
-        group: [keys, condition, initial, reduce, finalize, command],
+        command: [{
+          group: {
+            ns: selectedCollection,
+            key: Array.isArray(keys) ? Object.fromEntries(keys.map(k => [k, 1])) : keys,
+            cond: condition,
+            initial,
+            $reduce: { $code: reduce },
+            ...(finalize ? { finalize: { $code: finalize } } : {}),
+          },
+        }],
       },
     ];
 
-    return MongoDB.execute({ selectedCollection, methodArray, sessionId });
+    return MongoDB.executeAdmin({ methodArray, sessionId });
   },
 
   saveFindResult({ selectedCollection, updateObjects, deletedObjectIds, addedObjects, sessionId }) {
@@ -267,10 +285,10 @@ Meteor.methods({
   reIndex({ selectedCollection, sessionId }) {
     const methodArray = [
       {
-        reIndex: [],
+        command: [{ reIndex: selectedCollection }],
       },
     ];
-    return MongoDB.execute({ selectedCollection, methodArray, sessionId });
+    return MongoDB.executeAdmin({ methodArray, sessionId });
   },
 
   options({ selectedCollection, sessionId }) {
