@@ -42,9 +42,10 @@ MongoDBHelper.prototype = {
 
   clearConnectionOptionsForLog(connectionOptions) {
     const result = Object.assign({}, connectionOptions);
-    delete result.sslCert;
-    delete result.sslCA;
-    delete result.sslKey;
+    delete result.cert;
+    delete result.ca;
+    delete result.key;
+    delete result.passphrase;
 
     return result;
   },
