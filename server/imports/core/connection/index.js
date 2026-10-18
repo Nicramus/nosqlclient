@@ -8,15 +8,16 @@ const jsonParser = require('json5');
 const Connection = function () {
 };
 
+// driver 4 treats sslCA/sslCert/sslKey as file paths; the certificates here are file contents, so pass them as TLS options
 const addSSLOptions = function (obj, result) {
   if (obj.rootCAFile) {
-    result.sslValidate = true;
-    result.sslCA = Buffer.from(obj.rootCAFile);
+    result.tlsAllowInvalidCertificates = false;
+    result.ca = Buffer.from(obj.rootCAFile);
   }
-  if (obj.certificateFile) result.sslCert = Buffer.from(obj.certificateFile);
-  if (obj.certificateKeyFile) result.sslKey = Buffer.from(obj.certificateKeyFile);
-  if (obj.passPhrase) result.sslPass = obj.passPhrase;
-  if (obj.disableHostnameVerification) result.checkServerIdentity = false;
+  if (obj.certificateFile) result.cert = Buffer.from(obj.certificateFile);
+  if (obj.certificateKeyFile) result.key = Buffer.from(obj.certificateKeyFile);
+  if (obj.passPhrase) result.passphrase = obj.passPhrase;
+  if (obj.disableHostnameVerification) result.tlsAllowInvalidHostnames = true;
 };
 
 const setOptionsToConnectionFromParsedUrl = function (connection, parsedUrl) {
@@ -307,13 +308,15 @@ Connection.prototype = {
     // url
     let connectionUrl = 'mongodb://';
     if (connection.authenticationType) {
-      if (username) connectionUrl += encodeURIComponent(username);
-      else if (connection[connection.authenticationType].username) connectionUrl += encodeURIComponent(connection[connection.authenticationType].username);
+      let userInfo = '';
+      if (username) userInfo += encodeURIComponent(username);
+      else if (connection[connection.authenticationType].username) userInfo += encodeURIComponent(connection[connection.authenticationType].username);
 
-      if (password) connectionUrl += `:${encodeURIComponent(password)}`;
-      else if (connection[connection.authenticationType].password) connectionUrl += `:${encodeURIComponent(connection[connection.authenticationType].password)}`;
+      if (password) userInfo += `:${encodeURIComponent(password)}`;
+      else if (connection[connection.authenticationType].password) userInfo += `:${encodeURIComponent(connection[connection.authenticationType].password)}`;
 
-      connectionUrl += '@';
+      // driver 4 rejects an empty userinfo ("mongodb://@host"), e.g. x509 without an explicit username
+      if (userInfo) connectionUrl += `${userInfo}@`;
     }
     connection.servers.forEach((server) => { connectionUrl += `${encodeURIComponent(server.host)}:${server.port},`; });
 
@@ -362,10 +365,10 @@ Connection.prototype = {
   },
 
   getConnectionOptions(connection) {
-    const result = { useNewUrlParser: true, useUnifiedTopology: true };
+    const result = {};
     if (connection.authenticationType === 'mongodb_x509') addSSLOptions(connection.mongodb_x509, result);
     if (connection.ssl && connection.ssl.enabled) addSSLOptions(connection.ssl, result);
-    if (connection.options && connection.options.connectWithNoPrimary) result.connectWithNoPrimary = true;
+    // connection.options.connectWithNoPrimary is ignored: it was a no-op with the unified topology and driver 4 rejects it
 
     // added authSource to here to provide same authSource as DB name if it's not provided when connection is being used by URL
     if (connection.authenticationType === 'mongodb_cr' || connection.authenticationType === 'scram_sha_1' || connection.authenticationType === 'scram_sha_256') {

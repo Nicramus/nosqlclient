@@ -556,7 +556,7 @@ describe('Backup', () => {
 
     it('init without clock tick & with sessionId & observeChanges yieldsto CLOSED', () => {
       // prepare
-      const sessionId = Meteor.default_connection._lastSessionId;
+      const sessionId = Meteor.connection._lastSessionId;
       sinon.stub(ReactivityProvider, 'observeChanges').yieldsTo('added', null, { message: 'CLOSED' });
 
       // execute
@@ -582,7 +582,7 @@ describe('Backup', () => {
       // prepare
       const div = $('#mongodump');
       const message = 'dumping, please wait';
-      const sessionId = Meteor.default_connection._lastSessionId;
+      const sessionId = Meteor.connection._lastSessionId;
       sinon.stub(ReactivityProvider, 'observeChanges').yieldsTo('added', null, { message, binary: 'mongodump' });
 
       // execute
@@ -615,7 +615,7 @@ describe('Backup', () => {
 
     it('init with clock tick & with sessionId & observeChanges yieldsto CLOSED', () => {
       // prepare
-      const sessionId = Meteor.default_connection._lastSessionId;
+      const sessionId = Meteor.connection._lastSessionId;
       sinon.stub(ReactivityProvider, 'observeChanges').yieldsTo('added', null, { message: 'CLOSED' });
 
       // execute
