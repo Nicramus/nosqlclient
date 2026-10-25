@@ -4,6 +4,18 @@ All notable changes to this fork are documented here. This file is maintained by
 [release-please](https://github.com/googleapis/release-please) from
 [Conventional Commits](https://www.conventionalcommits.org/); see [docs/RELEASING.md](docs/RELEASING.md).
 
+## [4.2.0](https://github.com/Nicramus/nosqlclient/compare/4.1.0...4.2.0) (2026-10-25)
+
+
+### Features
+
+* upgrade mongodb driver 3.5.8 → 4.17.2 ([496fbbe](https://github.com/Nicramus/nosqlclient/commit/496fbbef9120e860c7b05144bdbc84c92bbc941a)), closes [#25](https://github.com/Nicramus/nosqlclient/issues/25)
+
+
+### Bug Fixes
+
+* remove dead newsletter subscription using upstream's Mailchimp key ([10737bb](https://github.com/Nicramus/nosqlclient/commit/10737bb35c3b154915a6b6dcb3e84230f2d85c85)), closes [#21](https://github.com/Nicramus/nosqlclient/issues/21)
+
 ## [4.1.0](https://github.com/Nicramus/nosqlclient/compare/4.0.1...4.1.0) (2026-10-13)
 
 
